@@ -1,0 +1,9 @@
+model Tweet {
+  id        String        @id @default(uuid())
+  createdAt DateTime      @default(now())
+  content   String
+  likes     User[]        @relation("TweetLikes")
+  author    User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  comments  Comment[]
+}

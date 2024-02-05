@@ -2,7 +2,9 @@ import Users from "../services/Users.js";
 
 const resolvers = {
   User: {
-    playlists: ({ id }) => Users.getPlaylists({ id }),
+    likes: ({ id }) => Users.getLikedTweets({ id }),
+    tweets: ({ id }) => Users.getTweets({ id }),
+    comments: ({ id }) => Users.getComments({ id }),
   },
   Query: {
     user: (_, { id }) => Users.find({ id }),
