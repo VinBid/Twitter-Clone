@@ -7,39 +7,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Playlist {
-  id        String           @id @default(uuid())
-  name      String
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  songs     PlaylistToSong[]
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-}
-
-model PlaylistToSong {
-  playlistId String
-  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
-  songId     String
-  song       Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  @@id(name: "id", fields: [playlistId, songId])
-}
-
-model Song {
-  id        String           @id @default(uuid())
-  name      String
-  playlists PlaylistToSong[]
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-}
-
 model User {
-  id        String     @id @default(uuid())
-  name      String
-  playlists Playlist[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id         String       @id @default(uuid())
+  email      String       @unique
+  password   String
+  name       String
+  likes      Tweet[]      @relation("Likes")
+  tweets     Tweet[]      @relation("Usertweet")
+  comments   Comment[]
+  Following  User[]       @relation("Follow", map:"following") // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/self-relations
+  Followers  User[]       @relation("Follow", map:"followers")
+}
+
+model Tweet {
+  id        String        @id @default(uuid())
+  createdAt DateTime      @default(now())
+  content   String
+  likes     User[]        @relation("Likes")
+  likeCount Int
+  author    User          @relation("Usertweet", fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  comments  Comment[]
+}
+
+model Comment {
+  id        String       @id @default(uuid())
+  createdAt DateTime     @default(now())
+  content   String
+  tweet     Tweet        @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+  tweetId   String
+  User      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
 }
