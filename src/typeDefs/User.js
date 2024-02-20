@@ -3,11 +3,17 @@ import gql from "graphql-tag";
 const typeDefs = gql`
   type User {
     id: ID!
+    email: String!
+    password: String!
     name: String!
-    playlists: [Playlist]
+    likes: [Tweet]
+    tweets: [Tweet]
+    comments: [Comment]
   }
 
   input UserInput {
+    email: String!
+    password: String!
     name: String!
   }
 

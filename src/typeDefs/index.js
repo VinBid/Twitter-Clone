@@ -1,5 +1,5 @@
 import User from "./User.js";
-import Playlist from "./Playlist.js";
-import Song from "./Song.js";
+import Tweet from "./Tweet.js";
+import Comment from "./Comment.js";
 
-export default [User, Playlist, Song];
+export default [User, Tweet, Comment];

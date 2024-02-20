@@ -1,48 +1,41 @@
 import prisma from "../prisma/client.js";
 
-export default class Users {
+export default class Tweets {
   // CREATE
   static async create({ input }) {
-    const { email, password, name } = input;
-    const user = await prisma.user.create({
+    const { authorId, content } = input;
+    const tweet = await prisma.tweet.create({
       data: {
-        email,
-        password,
-        name,
+        authorId,
+        content,
       },
     });
-    return user;
+    return tweet;
   }
 
   // READ
   static async find({ id }) {
-    return prisma.user.findUnique({
+    return prisma.tweet.findUnique({
       where: {
         id,
       },
     });
   }
 
-  static async findMany({ ids }) {
-    return prisma.user.findMany({
-      where: {
-        id: {
-          in: ids,
-        },
-      },
-    });
+  static async findAll() {
+    return prisma.tweet.findMany();
   }
 
   // UDPATE
   static async update({ id, input }) {
     try {
-      const user = await prisma.user.update({
+      const tweet = await prisma.tweet.update({
         where: {
           id,
         },
         data: input,
       });
-      return user;
+      return tweet;
     } catch (e) {
       return null;
     }
@@ -51,7 +44,7 @@ export default class Users {
   // DELETE
   static async delete({ id }) {
     try {
-      await prisma.user.delete({
+      await prisma.tweet.delete({
         where: {
           id,
         },
@@ -63,8 +56,8 @@ export default class Users {
   }
 
   // OTHER
-  static async getLikedTweets({ id }) {
-    return prisma.tweet.findMany({
+  static async getLikes({ id }) {
+    return prisma.user.findMany({
       where: {
         likes: {
           some: {
